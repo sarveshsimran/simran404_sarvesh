@@ -13,7 +13,7 @@ echo ""
 echo -e "\e[1;35m👤 Name:\e[0m          Sarvesh Bharti"
 echo -e "\e[1;35m📍 Address:\e[0m       Dariyapur, Azamgarh, Uttar Pradesh"
 echo -e "\e[1;35m👨‍👦 s/o:\e[0m          Om Prakash"
-echo -e "\e[1;35m🎓 Role:\e[0m          Ethical Hacker | Tool Developer"(Cybersecurity)
+echo -e "\e[1;35m🎓 Role:\e[0m          Ethical Hacker | Tool Developer"
 echo -e "\e[1;35m🔧 Skills:\e[0m        Bash, Linux, GitHub"
 echo -e "\e[1;35m🌐 GitHub:\e[0m       https://github.com/sarveshsimran"
 echo ""
