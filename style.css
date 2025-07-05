@@ -1,91 +1,87 @@
 body {
-  background-color: #000;
+  background-color: #000000;
   color: #00ffcc;
   font-family: 'Courier New', Courier, monospace;
   margin: 0;
   padding: 0;
-  scroll-behavior: smooth;
 }
 
 header {
   background-color: #111;
-  padding: 30px 0;
+  padding: 20px;
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: bold;
   border-bottom: 2px solid #00ffcc;
-  animation: fadeIn 2s ease-in-out;
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 nav {
   background-color: #222;
-  padding: 15px;
+  padding: 10px;
   text-align: center;
 }
 
 nav a {
   color: #00ffcc;
-  margin: 0 15px;
   text-decoration: none;
+  margin: 0 10px;
   font-weight: bold;
 }
 
 nav a:hover {
   color: #ffffff;
+  text-decoration: underline;
+  transition: all 0.3s ease-in-out;
 }
 
 main {
-  padding: 30px;
+  padding: 20px;
 }
 
 section {
-  margin-bottom: 50px;
-  animation: fadeIn 1.5s ease;
-}
-
-.tool-card {
-  background-color: #111;
-  border: 1px solid #00ffcc;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  max-width: 300px;
-  text-align: center;
-  box-shadow: 0 0 10px #00ffcc33;
-}
-
-.tool-card img {
-  max-width: 100px;
-  margin-bottom: 10px;
-}
-
-pre {
-  background-color: #111;
-  padding: 15px;
-  border-radius: 5px;
-  overflow-x: auto;
-  border-left: 4px solid #00ffcc;
+  margin-bottom: 30px;
+  animation: fadeIn 2s ease-in;
 }
 
 footer {
   background-color: #111;
-  text-align: center;
   padding: 20px;
+  text-align: center;
   font-size: 14px;
-  border-top: 1px solid #00ffcc;
   color: #aaa;
+  border-top: 1px solid #00ffcc;
 }
 
 a {
   color: #00ffcc;
   text-decoration: none;
+  transition: all 0.3s ease-in-out;
 }
 
 a:hover {
-  color: #fff;
+  color: #ffffff;
+  text-decoration: underline;
 }
 
-/* Animations */
+img {
+  border-radius: 12px;
+  box-shadow: 0 0 15px #00ffcc;
+  transition: transform 0.5s ease-in-out;
+}
+
+img:hover {
+  transform: scale(1.05);
+}
+
+/* Animation */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
