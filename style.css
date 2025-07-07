@@ -19,7 +19,7 @@ canvas#matrix {
 .content {
   text-align: center;
   padding: 30px;
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
 }
 
@@ -40,6 +40,7 @@ canvas#matrix {
   cursor: pointer;
   border-radius: 8px;
   transition: background 0.3s;
+  font-size: 16px;
 }
 
 .buttons button:hover {
@@ -52,6 +53,27 @@ canvas#matrix {
   margin-top: 20px;
   text-align: left;
   background: rgba(0, 255, 204, 0.1);
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre-wrap; /* Wrap long commands properly */
+}
+
+@media screen and (max-width: 600px) {
+  .section {
+    font-size: 18px;
+    padding: 20px;
+  }
+
+  .buttons button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
 }
