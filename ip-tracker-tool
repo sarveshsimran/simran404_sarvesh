@@ -1,1 +1,125 @@
+#!/usr/bin/env python3
+"""
+iptracker.py
+Simple CLI IP Tracker that fetches geolocation & ISP details from public APIs.
+Usage:
+  python iptracker.py 8.8.8.8
+  python iptracker.py        # (no arg -> detects your public IP)
+"""
 
+import argparse
+import requests
+import sys
+
+# Optional: colored output if colorama installed
+try:
+    from colorama import init, Fore, Style
+    init(autoreset=True)
+    C_IP = Fore.CYAN + Style.BRIGHT
+    C_KEY = Fore.YELLOW
+    C_VAL = Fore.GREEN
+except Exception:
+    C_IP = C_KEY = C_VAL = ""
+
+def get_public_ip():
+    # Simple public IP detection
+    try:
+        r = requests.get("https://api.ipify.org?format=json", timeout=6)
+        return r.json().get("ip")
+    except Exception:
+        return None
+
+def fetch_from_ipapi(ip):
+    """Try ipapi.co first (gives currency, timezone, etc)"""
+    url = f"https://ipapi.co/{ip}/json/"
+    try:
+        r = requests.get(url, timeout=8)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception:
+        return None
+
+def fetch_from_ipinfo(ip):
+    """Fallback to ipinfo.io"""
+    url = f"https://ipinfo.io/{ip}/json"
+    try:
+        r = requests.get(url, timeout=8)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception:
+        return None
+
+def combine_data(primary, fallback):
+    # Merge two dicts - primary keys preferred
+    out = {}
+    if fallback:
+        out.update(fallback)
+    if primary:
+        out.update(primary)
+    return out
+
+def print_result(data, ip):
+    def g(k): return data.get(k, "N/A")
+    # Some APIs return loc as "lat,lon"
+    if "loc" in data and "," in str(data.get("loc")):
+        lat, lon = str(data.get("loc")).split(",", 1)
+    else:
+        lat = data.get("latitude") or data.get("lat") or "N/A"
+        lon = data.get("longitude") or data.get("lon") or "N/A"
+
+    print()
+    print(f"{C_IP}📡 IP Tracker Results for: {ip}{Style.RESET_ALL}")
+    print(f"{C_KEY}IP address: {C_VAL}{g('ip') or ip}")
+    print(f"{C_KEY}City: {C_VAL}{g('city')}")
+    print(f"{C_KEY}Region name: {C_VAL}{g('region') or g('region_name')}")
+    print(f"{C_KEY}Country name: {C_VAL}{g('country_name') or g('country')}")
+    print(f"{C_KEY}Timezone: {C_VAL}{g('timezone')}")
+    print(f"{C_KEY}Latitude: {C_VAL}{lat}")
+    print(f"{C_KEY}Longitude: {C_VAL}{lon}")
+    # org / isp fields
+    org = g('org') or g('asn') or g('connection') or g('hostname')
+    print(f"{C_KEY}Org / ISP: {C_VAL}{org}")
+    # Currency (ipapi returns 'currency')
+    print(f"{C_KEY}Currency: {C_VAL}{g('currency')}")
+    # Additional fields if available
+    print(f"{C_KEY}Country code: {C_VAL}{g('country') or g('country_code') or g('country_code_iso3')}")
+    print(f"{C_KEY}Postal: {C_VAL}{g('postal') or g('postal_code')}")
+    print(f"{C_KEY}ASN / Range: {C_VAL}{g('asn') or g('org')}")
+    print()
+    # Google Maps link
+    if lat != "N/A" and lon != "N/A":
+        try:
+            latf = float(lat); lonf = float(lon)
+            maps = f"https://www.google.com/maps/search/?api=1&query={latf},{lonf}"
+            print(f"{C_KEY}Google Maps: {C_VAL}{maps}")
+        except Exception:
+            pass
+
+def main():
+    parser = argparse.ArgumentParser(description="IP Tracker - terminal based")
+    parser.add_argument("ip", nargs="?", help="IP address to lookup (optional). If omitted, detects your public IP.")
+    args = parser.parse_args()
+
+    ip = args.ip
+    if not ip:
+        ip = get_public_ip()
+        if not ip:
+            print("Error: Could not detect public IP. Provide IP as argument, e.g. python iptracker.py 8.8.8.8")
+            sys.exit(1)
+
+    # Try primary API
+    data1 = fetch_from_ipapi(ip)
+    # fallback
+    data2 = fetch_from_ipinfo(ip)
+
+    data = combine_data(data1, data2)
+    # Ensure ip key exists
+    if not data.get("ip"):
+        data["ip"] = ip
+
+    print_result(data, ip)
+
+if __name__ == "__main__":
+    main()
